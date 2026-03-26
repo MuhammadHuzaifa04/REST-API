@@ -3,8 +3,8 @@ import cors from 'cors';
 import { routes } from './routes';
 import { globalErrorHandler, notFoundHandler } from './middlewares';
 import dotenv from 'dotenv';
-import { no } from 'zod/v4/locales';
 dotenv.config();
+import { no } from 'zod/v4/locales';
 
 const app = express();
 

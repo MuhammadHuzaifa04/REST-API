@@ -2,9 +2,19 @@ import { Router } from 'express';
 import { getUser, getUsers } from '../controllers';
 import { authMiddleware } from '../middlewares/';
 
-const router = Router();
+export class UserRouter {
+  public user_router: Router;
 
-router.get('/users', authMiddleware, getUsers);
-router.get('/users/:id', authMiddleware, getUser);
+  constructor() {
+    this.user_router = Router();
+    this.init();
+  }
 
-export default router;
+  private init(): void {
+    this.user_router.get('/users', authMiddleware, getUsers);
+
+    this.user_router.get('/users/:id', authMiddleware, getUser);
+  }
+}
+
+export default new UserRouter().user_router;

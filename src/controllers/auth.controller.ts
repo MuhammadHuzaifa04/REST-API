@@ -1,15 +1,22 @@
 import { Request, Response } from 'express';
 import { AuthService } from '../services';
 import { asyncHandler } from '../utils/';
+import { sendSuccess, sendError, sendBadRequest } from '../utils';
 
 const authService = new AuthService();
 
-export async function register(req: Request, res: Response) {
+// Register user
+export const register = asyncHandler(async (req: Request, res: Response) => {
   const user = await authService.register(req.body);
-  res.json({ success: true, data: user });
-}
+  return sendSuccess(res, 'User registered successfully', user, 201);
+});
 
-export async function login(req: Request, res: Response) {
-  const result = await authService.login(req.body.email, req.body.password);
-  res.json({ success: true, data: result });
-}
+// Login user
+export const login = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  if (!email || !password)
+    return sendBadRequest(res, 'Email and password are required');
+
+  const result = await authService.login(email, password);
+  return sendSuccess(res, 'Login successful', result, 200);
+});
