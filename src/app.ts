@@ -1,17 +1,22 @@
 import express from 'express';
 import cors from 'cors';
-import { routes } from './routes';
-import { globalErrorHandler, notFoundHandler } from './middlewares';
 import dotenv from 'dotenv';
 dotenv.config();
-import { no } from 'zod/v4/locales';
+
+import API from './routes'; // your class-based API file
+import { globalErrorHandler, notFoundHandler } from './middlewares';
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-app.use('/api', routes);
+// Initialize class-based API and mount all routes
+const api = new API();
+app.use(api.getRouter());
+
+// Error handling middlewares
 app.use(notFoundHandler);
 app.use(globalErrorHandler);
 

@@ -1,20 +1,25 @@
 import { Router } from 'express';
 import { getUser, getUsers } from '../controllers';
-import { authMiddleware } from '../middlewares/';
+import { authMiddleware } from '../middlewares';
 
-export class UserRouter {
-  public user_router: Router;
+export default class UserAPI {
+  router: Router;
 
   constructor() {
-    this.user_router = Router();
-    this.init();
+    this.router = Router();
+    this.setupRoutes();
   }
 
-  private init(): void {
-    this.user_router.get('/users', authMiddleware, getUsers);
+  setupRoutes() {
+    this.router.get('/', authMiddleware, getUsers);
+    this.router.get('/:id', authMiddleware, getUser);
+  }
 
-    this.user_router.get('/users/:id', authMiddleware, getUser);
+  getRouter() {
+    return this.router;
+  }
+
+  getRouterGroup() {
+    return '/users';
   }
 }
-
-export default new UserRouter().user_router;

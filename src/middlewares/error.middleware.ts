@@ -1,29 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import { ERROR_CODES } from '../utils';
+import { sendResponse } from '../utils/response';
 
 export const notFoundHandler = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  res.status(ERROR_CODES.USER_NOT_FOUND.status).json({
-    success: false,
-    message: ERROR_CODES.USER_NOT_FOUND.message,
-  });
+  return sendResponse(res, 'API endpoint not found', {}, 404);
 };
 export const globalErrorHandler = (
-  err: any,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const statusCode = err.statusCode || ERROR_CODES.INTERNAL_SERVER.status;
-  const message = err.message || ERROR_CODES.INTERNAL_SERVER.message;
-
-  res.status(statusCode).json({
-    success: false,
-    message,
-
-    //not found
-  });
+  return sendResponse(res, 'Internal Server Error', {}, 500);
 };

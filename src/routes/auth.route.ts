@@ -2,19 +2,24 @@ import { Router } from 'express';
 import { register, login } from '../controllers';
 import { loginValidation, registerValidation } from '../validations';
 
-class AuthRouter {
-  public router: Router;
+export default class AuthAPI {
+  router: Router;
 
   constructor() {
     this.router = Router();
-    this.init();
+    this.setupRoutes();
   }
 
-  private init(): void {
-    this.router.post('/auth/register', registerValidation, register);
+  setupRoutes() {
+    this.router.post('/register', registerValidation, register);
+    this.router.post('/login', loginValidation, login);
+  }
 
-    this.router.post('/auth/login', loginValidation, login);
+  getRouter() {
+    return this.router;
+  }
+
+  getRouterGroup() {
+    return '/auth';
   }
 }
-
-export default new AuthRouter().router;
